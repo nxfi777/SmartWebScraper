@@ -12,10 +12,11 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --d
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 RUN apt-get update && apt-get install -y google-chrome-stable
 
-# Extract Chrome version and install matching ChromeDriver
-RUN CHROME_VERSION=$(google-chrome --version | grep -oE '[0-9]+' | head -1) && \
-    echo "Chrome version: $CHROME_VERSION" && \
-    CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION") && \
+# Extract Chrome version using correct parsing and install matching ChromeDriver
+RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+\.\d+' | head -1) && \
+    CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d. -f1) && \
+    echo "Chrome major version: $CHROME_MAJOR_VERSION" && \
+    CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION") && \
     echo "ChromeDriver version: $CHROMEDRIVER_VERSION" && \
     wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" && \
     unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
