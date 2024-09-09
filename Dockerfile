@@ -4,13 +4,16 @@ FROM python:3.10-slim
 # Set the working directory to /app
 WORKDIR /app
 
-# Install necessary dependencies including curl, Chrome, and additional fonts
+# Install necessary dependencies including curl, Chromium, and additional fonts
 RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     gnupg \
     gpg \
     curl \
+    software-properties-common \
+    chromium \
+    chromium-driver \
     libglib2.0-0 \
     libnss3 \
     libgconf-2-4 \
@@ -31,18 +34,9 @@ RUN apt-get update && apt-get install -y \
     libgtk-3-0 && \
     rm -rf /var/lib/apt/lists/*
 
-# Download and install Google Chrome
-RUN wget -q -O google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get update && apt-get install -y ./google-chrome.deb && \
-    rm google-chrome.deb
-
-# Download and install the latest ChromeDriver
-RUN CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE") && \
-    echo "ChromeDriver version: $CHROMEDRIVER_VERSION" && \
-    wget -q "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" && \
-    unzip chromedriver_linux64.zip -d /usr/local/bin/ && \
-    chmod +x /usr/local/bin/chromedriver && \
-    rm chromedriver_linux64.zip
+# Create symbolic links to use the chromium-browser and chromedriver correctly with selenium
+RUN ln -s /usr/bin/chromium /usr/bin/google-chrome && \
+    ln -s /usr/bin/chromedriver /usr/local/bin/chromedriver
 
 # Copy the requirements file
 COPY requirements.txt .
