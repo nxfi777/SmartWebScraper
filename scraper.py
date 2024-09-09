@@ -12,35 +12,30 @@ import html2text
 import tiktoken
 
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from openai import OpenAI
 
-# Set up the Chromium WebDriver
+# Set up the Chromium WebDriver options
 def setup_selenium():
     options = Options()
 
-    # Adding arguments
+    # adding arguments
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
-    options.add_argument("--no-sandbox")  # Add no-sandbox for running Chrome in Docker
+    options.add_argument("--no-sandbox")  # Add no-sandbox for running Chromium in Docker
     options.add_argument("--headless")  # Ensure headless mode
     
     # Randomize user-agent to mimic different users
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
-    # Specify the path to Chromium
-    chromium_path = '/usr/bin/chromium'
-    chrome_service = ChromeService(executable_path=chromium_path)
+    # Specify the path to the Chromium executable
+    options.binary_location = "/usr/bin/chromium"
 
-    # Log level set to DEBUG for more detailed logging
-    chrome_service.log_level = "DEBUG"
-    
-    # Initialize the WebDriver with service
-    driver = webdriver.Chrome(service=chrome_service, options=options)
+    # Initialize the WebDriver
+    driver = webdriver.Chrome(options=options)
     return driver
 
 
