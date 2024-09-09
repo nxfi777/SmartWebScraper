@@ -18,8 +18,7 @@ from selenium.webdriver.common.by import By
 
 from openai import OpenAI
 
-# Set up the Chrome WebDriver options
-
+# Set up the Chromium WebDriver
 def setup_selenium():
     options = Options()
 
@@ -33,11 +32,12 @@ def setup_selenium():
     # Randomize user-agent to mimic different users
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
-    # Specify the path to the Chromium executable
-    options.binary_location = "/usr/bin/chromium"
+    # Specify the path to Chromium
+    chromium_path = '/usr/bin/chromium'
+    chrome_service = ChromeService(executable_path=chromium_path)
 
-    # Initialize the WebDriver
-    driver = webdriver.Chrome(options=options)
+    # Initialize the WebDriver with service
+    driver = webdriver.Chrome(service=chrome_service, options=options)
     return driver
 
 
