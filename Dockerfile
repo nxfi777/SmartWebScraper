@@ -15,9 +15,6 @@ RUN CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/
     chmod +x /usr/local/bin/chromedriver && \
     rm chromedriver_linux64.zip
 
-# Ensure shared memory allocation
-RUN mkdir -p /dev/shm && mount -t tmpfs -o size=1G tmpfs /dev/shm
-
 # Copy the requirements file
 COPY requirements.txt .
 
