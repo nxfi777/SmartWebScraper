@@ -5,7 +5,7 @@ import pandas as pd
 import json
 import os
 from datetime import datetime
-from scraper import fetch_html_selenium, save_raw_data, format_data, save_formatted_data, calculate_price,html_to_markdown_with_readability, create_dynamic_listing_model,create_listings_container_model
+from scraper import fetch_html_selenium, save_raw_data, format_data, save_formatted_data, calculate_price, html_to_markdown_with_readability, create_dynamic_listing_model, create_listings_container_model
 
 # Fetching credentials from environment variables
 USERNAME = os.getenv('USERNAME', 'scraper')
@@ -20,7 +20,10 @@ credentials = {"usernames": {USERNAME: {"name": USERNAME, "password": PASSWORD}}
 
 authenticator = stauth.Authenticate(credentials, "WebScraperApp", "auth", cookie_expiry_days=1)
 
-name, authentication_status, username = authenticator.login("Login", "main")
+# Moving on to the proper checking of 'main' location
+login_location = "main"  # This ensures location is definitely set
+
+name, authentication_status, username = authenticator.login("Login", login_location)
 
 if authentication_status:
     # Initialize Streamlit app
