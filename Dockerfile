@@ -4,8 +4,8 @@ FROM python:3.10-slim
 # Set the working directory to /app
 WORKDIR /app
 
-# Install wget and unzip
-RUN apt-get update && apt-get install -y wget unzip
+# Install wget, unzip, and gnupg
+RUN apt-get update && apt-get install -y wget unzip gnupg
 
 # Install ChromeDriver
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
