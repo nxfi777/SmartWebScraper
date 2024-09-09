@@ -5,8 +5,15 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Install necessary dependencies including curl, Chromium, and Chromium Driver
-RUN apt-get update && apt-get install -y wget unzip gnupg gpg curl \
-    chromium chromium-driver
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    gnupg \
+    gpg \
+    curl \
+    chromium \
+    chromium-driver \
+    fonts-liberation
 
 # Copy the requirements file
 COPY requirements.txt .

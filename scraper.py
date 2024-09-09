@@ -22,7 +22,7 @@ from openai import OpenAI
 def setup_selenium():
     options = Options()
 
-    # adding arguments
+    # Adding arguments
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
@@ -36,6 +36,9 @@ def setup_selenium():
     chromium_path = '/usr/bin/chromium'
     chrome_service = ChromeService(executable_path=chromium_path)
 
+    # Log level set to DEBUG for more detailed logging
+    chrome_service.log_level = "DEBUG"
+    
     # Initialize the WebDriver with service
     driver = webdriver.Chrome(service=chrome_service, options=options)
     return driver
