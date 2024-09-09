@@ -10,3 +10,4 @@ readability-lxml
 streamlit
 streamlit-tags
 openpyxl
+streamlit-authenticator
