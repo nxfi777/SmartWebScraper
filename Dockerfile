@@ -4,6 +4,8 @@ FROM python:3.10-slim
 # Set the working directory to /app
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y libxi6 libgconf-2-4
+
 # Copy the requirements file
 COPY requirements.txt .
 
