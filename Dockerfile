@@ -5,7 +5,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Install necessary dependencies
-RUN apt-get update && apt-get install -y wget unzip gnupg gpg
+RUN apt-get update && apt-get install -y wget unzip gnupg gpg curl
 
 # Install Chrome
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor | tee /etc/apt/trusted.gpg.d/google-chrome.gpg

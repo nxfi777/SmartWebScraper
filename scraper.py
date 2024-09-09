@@ -83,8 +83,8 @@ pricing = {
         "output": 0.600 / 1_000_000, # $0.600 per 1M output tokens
     },
     "gpt-4o-2024-08-06": {
-        "input": 2.5 / 1_000_000,  # $0.150 per 1M input tokens
-        "output": 10 / 1_000_000, # $0.600 per 1M output tokens
+        "input": 2.5 / 1_000_000,  # $2.50 per 1M input tokens
+        "output": 10 / 1_000_000, # $10.00 per 1M output tokens
     },
 
 
