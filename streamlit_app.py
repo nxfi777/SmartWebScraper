@@ -4,14 +4,15 @@ import pandas as pd
 import json
 from datetime import datetime
 from scraper import fetch_html_selenium, save_raw_data, format_data, save_formatted_data, calculate_price,html_to_markdown_with_readability, create_dynamic_listing_model,create_listings_container_model
+import os
 
 # Initialize Streamlit app
 st.set_page_config(page_title="Universal Web Scraper")
 st.title("Universal Web Scraper ")
 
 # Hardcoded username and password
-USERNAME = "admin"
-PASSWORD = "password"
+USERNAME = os.getenv("USERNAME", "admin")
+PASSWORD = os.getenv("PASSWORD", "password")
 
 # Login form
 def login_form():
