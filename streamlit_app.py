@@ -19,10 +19,9 @@ if PASSWORD == 'default_hashed_password':
 credentials = {"usernames": {USERNAME: {"name": USERNAME, "password": PASSWORD}}}
 
 # Set the login location
-login_location = "main"  # This ensures location is definitely set
-
 authenticator = stauth.Authenticate(credentials, "WebScraperApp", "auth", cookie_expiry_days=1)
 
+login_location = 'main'  # or 'sidebar' or 'unrendered'
 name, authentication_status, username = authenticator.login("Login", login_location)
 
 if authentication_status:
