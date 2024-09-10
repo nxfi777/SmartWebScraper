@@ -1,37 +1,38 @@
 import streamlit as st
-import streamlit_authenticator as stauth
 from streamlit_tags import st_tags_sidebar
 import pandas as pd
 import json
-import os
 from datetime import datetime
-from scraper import fetch_html_selenium, save_raw_data, format_data, save_formatted_data, calculate_price, html_to_markdown_with_readability, create_dynamic_listing_model, create_listings_container_model
+from scraper import fetch_html_selenium, save_raw_data, format_data, save_formatted_data, calculate_price,html_to_markdown_with_readability, create_dynamic_listing_model,create_listings_container_model
 
-# Fetching credentials from environment variables
-USERNAME = os.getenv('USERNAME', 'scraper')
-PASSWORD = os.getenv('PASSWORD', 'default_hashed_password')  # Use a robust fallback mechanism that can alert or deny access
+# Initialize Streamlit app
+st.set_page_config(page_title="Universal Web Scraper")
+st.title("Universal Web Scraper ")
 
-# Validate if credentials are configured properly
-if PASSWORD == 'default_hashed_password':
-    st.error("Credentials are not properly set. Please configure the environment variables USERNAME and PASSWORD.")
+# Hardcoded username and password
+USERNAME = "admin"
+PASSWORD = "password"
 
-# Streamlit-Authenticator configuration
-credentials = {"usernames": {USERNAME: {"name": USERNAME, "password": PASSWORD}}}
+# Login form
+def login_form():
+    with st.sidebar.form("login"):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submit = st.form_submit_button("Login")
+        if submit:
+            if username == USERNAME and password == PASSWORD:
+                st.session_state["logged_in"] = True
+            else:
+                st.error("Invalid username or password")
 
-# Set the login location
-login_location = 'main'  # or 'sidebar' or 'unrendered'
-# Verify the login_location
-assert login_location in ['main', 'sidebar', 'unrendered'], f"Invalid login location: {login_location}"
+# Check if user is logged in
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
 
-authenticator = stauth.Authenticate(credentials, "WebScraperApp", "auth", cookie_expiry_days=1)
-name, authentication_status, username = authenticator.login("Login", login_location)
-
-if authentication_status:
-    # Initialize Streamlit app
-    st.set_page_config(page_title="Universal Web Scraper")
-    st.title("Universal Web Scraper 🦑")
-
-    # Sidebar components
+if not st.session_state["logged_in"]:
+    login_form()
+else:
+    # Rest of the app
     st.sidebar.title("Web Scraper Settings")
     model_selection = st.sidebar.selectbox("Select Model", options=["gpt-4o-mini", "gpt-4o-2024-08-06"], index=0)
     url_input = st.sidebar.text_input("Enter URL")
@@ -55,6 +56,7 @@ if authentication_status:
     # Initialize variables to store token and cost information
     input_tokens = output_tokens = total_cost = 0  # Default values
 
+    # Buttons to trigger scraping
     # Define the scraping function
     def perform_scrape():
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -103,6 +105,7 @@ if authentication_status:
             # Create DataFrame from the data
             df = pd.DataFrame(main_data)
 
+            # data_dict=json.dumps(formatted_data.dict(), indent=4)
             st.download_button("Download CSV", data=df.to_csv(index=False), file_name=f"{timestamp}_data.csv")
         with col3:
             st.download_button("Download Markdown", data=markdown, file_name=f"{timestamp}_data.md")
@@ -110,9 +113,3 @@ if authentication_status:
     # Ensure that these UI components are persistent and don't rely on re-running the scrape function
     if 'results' in st.session_state:
         df, formatted_data, markdown, input_tokens, output_tokens, total_cost, timestamp = st.session_state['results']
-
-elif authentication_status == False:
-    st.error("Username/password is incorrect")
-
-elif authentication_status == None:
-    st.warning("Please enter your username and password")
