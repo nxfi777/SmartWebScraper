@@ -18,10 +18,10 @@ if PASSWORD == 'default_hashed_password':
 # Streamlit-Authenticator configuration
 credentials = {"usernames": {USERNAME: {"name": USERNAME, "password": PASSWORD}}}
 
-authenticator = stauth.Authenticate(credentials, "WebScraperApp", "auth", cookie_expiry_days=1)
-
-# Moving on to the proper checking of 'main' location
+# Set the login location
 login_location = "main"  # This ensures location is definitely set
+
+authenticator = stauth.Authenticate(credentials, "WebScraperApp", "auth", cookie_expiry_days=1)
 
 name, authentication_status, username = authenticator.login("Login", login_location)
 
